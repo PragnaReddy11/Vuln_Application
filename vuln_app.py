@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, redirect, send_from_directory, render_template_string
+from flask import Flask, request, redirect, send_from_directory, render_template, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -33,115 +33,7 @@ init_db()  # Initialize the database when the app starts
 
 @app.route('/')
 def index():
-    return render_template_string('''
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>CMU AIA File Upload Server</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    background-color: #f4f4f9;
-                    color: #333;
-                    margin: 0;
-                    padding: 0;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 100vh;
-                    background: linear-gradient(135deg, #667eea, #764ba2);
-                }
-                .container {
-                    background-color: white;
-                    padding: 2rem;
-                    border-radius: 10px;
-                    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-                    width: 100%;
-                    max-width: 600px;
-                }
-                h1 {
-                    color: #764ba2;
-                    text-align: center;
-                }
-                form {
-                    display: flex;
-                    flex-direction: column;
-                    margin-bottom: 2rem;
-                }
-                label {
-                    margin-bottom: 0.5rem;
-                    font-weight: bold;
-                }
-                input[type="text"], input[type="password"], input[type="file"], input[type="submit"] {
-                    padding: 0.75rem;
-                    margin-bottom: 1rem;
-                    border: 1px solid #ddd;
-                    border-radius: 5px;
-                }
-                input[type="submit"] {
-                    background-color: #764ba2;
-                    color: white;
-                    border: none;
-                    cursor: pointer;
-                }
-                input[type="submit"]:hover {
-                    background-color: #667eea;
-                }
-                .note {
-                    text-align: center;
-                    font-style: italic;
-                    color: #666;
-                }
-                .error {
-                    color: red;
-                    text-align: center;
-                    margin-bottom: 1rem;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <h1>CMU AIA Class File Upload Server</h1>
-
-                <!-- Login Form -->
-                <h2>Login (Vulnerable to SQL Injection and Hardcoded Secret)</h2>
-                <form method="POST" action="/login">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username" id="username" placeholder="Enter your username" required />
-
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" id="password" placeholder="Enter your password" required />
-
-                    <input type="submit" value="Login" />
-                </form>
-
-                <!-- File Upload Form -->
-                <h2>Upload a File</h2>
-                <form method="POST" enctype="multipart/form-data" action="/upload">
-                    <label for="file">Choose file to upload:</label>
-                    <input type="file" name="file" id="file" required />
-
-                    <input type="submit" value="Upload">
-                </form>
-
-                <!-- File Search Form -->
-                <h2>Search for a File</h2>
-                <form method="POST" action="/search">
-                    <label for="query">Search query:</label>
-                    <input type="text" name="query" id="query" placeholder="Enter file name to search" required />
-
-                    <input type="submit" value="Search">
-                </form>
-
-                <div class="note">
-                    <p>Note: This is a vulnerable application for testing purposes only.</p>
-                </div>
-            </div>
-        </body>
-        </html>
-    ''')
+    return render_template('index.html')
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -150,7 +42,7 @@ def login():
 
     # Hardcoded secret vulnerability
     if password == ADMIN_PASSWORD:
-        return f"Welcome, Admin! (You logged in using a hardcoded secret)"
+        return render_template('welcome.html', username="Admin")
 
     # Vulnerable SQL query - User input directly passed into SQL query (SQL Injection)
     query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
@@ -163,7 +55,7 @@ def login():
         user = c.fetchone()
         conn.close()
         if user:
-            return f"Welcome, {username}!"
+            return render_template('welcome.html', username=username)
         else:
             return "Invalid credentials"
     except sqlite3.Error as e:
