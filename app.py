@@ -1,15 +1,19 @@
 import os
-from flask import Flask, request, redirect, send_from_directory, render_template, url_for
+from flask import Flask, request, redirect, send_from_directory, render_template, url_for, jsonify
 import sqlite3
-
+import python_jwt as jwt 
+import datetime
+from jwcrypto import jwk
 app = Flask(__name__)
 
 # Directory to store uploaded files
 UPLOAD_FOLDER = './uploads'
+
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = jwk.JWK.generate(kty='RSA', size=2048)
 
 # Hardcoded secret (bad practice)
 ADMIN_PASSWORD = "admin"
@@ -61,6 +65,37 @@ def login():
     except sqlite3.Error as e:
         return f"An error occurred: {e}"
 
+# Generate JWT token
+@app.route('/test', methods=['GET'])
+def test():
+    # Get the username and password from the GET parameters
+    username = request.args.get('username')
+    password = request.args.get('password')
+    if username and password:
+        # Creating a JWT token with user claims
+        token = jwt.generate_jwt({
+            'user': username,
+            'role': 'admin',  # Claims include 'role' that defines user privileges
+        }, app.config['SECRET_KEY'], 'RS256', datetime.timedelta(minutes=5))
+        return jsonify({'token': token})
+    
+    return 'Could not verify', 401
+
+# Protected route, only accessible to users with 'admin' role
+@app.route('/protected', methods=['GET'])
+def protected():
+    token = request.args.get('token')
+    if not token:
+        return jsonify({'message': 'Token is missing'}), 403
+    try:
+        # Decode the token and check if the 'role' is 'admin'
+        header,claims = jwt.verify_jwt(token, app.config['SECRET_KEY'], ['RS256'])
+        
+        return jsonify({'header': header, 'claims': claims})
+
+    except Exception as e:
+        return jsonify({'message': f'Error: {str(e)}'}), 403
+
 # File upload functionality
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -72,6 +107,13 @@ def upload_file():
     filename = file.filename
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     return f'File {filename} uploaded successfully!'
+
+# example of command injection
+@app.route('/run', methods=['GET'])
+def run_command():
+    command = request.args.get('command')
+    os.system(command)  # Vulnerable to command injection
+    return f"Executed: {command}"
 
 # Vulnerable search functionality with command injection (updated)
 @app.route('/search', methods=['POST'])
