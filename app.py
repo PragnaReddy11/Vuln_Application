@@ -49,6 +49,7 @@ def login():
         return render_template('welcome.html', username="Admin")
 
     # Vulnerable SQL query - User input directly passed into SQL query (SQL Injection)
+    #' OR '1'='1
     query = f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
     
     # Executing the query (dangerous!)
