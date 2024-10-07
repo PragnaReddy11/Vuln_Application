@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMU AIA File Upload Server - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to CMU AIA Class File Upload Server</h1>
+        <p>Select an option below:</p>
+        
+        <form method="GET" action="/upload">
+            <button type="submit">Upload File</button>
+        </form>
+
+        <form method="GET" action="/search">
+            <button type="submit">Search Files</button>
+        </form>
+
+        <br><a href="/logout">Logout</a>
+    </div>
+</body>
+</html>
