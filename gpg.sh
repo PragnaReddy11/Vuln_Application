@@ -92,7 +92,3 @@ else
     exit 1
 fi
 
-# Clean up (optional)
-echo "Cleanup: Removing generated keys (optional)..."
-gpg --batch --yes --delete-secret-and-public-key "$GPG_KEY"
-rm public_key.asc
