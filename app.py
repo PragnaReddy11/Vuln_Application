@@ -4,6 +4,7 @@ import sqlite3
 import python_jwt as jwt 
 import datetime
 from jwcrypto import jwk
+
 app = Flask(__name__)
 
 # Directory to store uploaded files
@@ -43,7 +44,7 @@ def index():
     # If not logged in, show the login page
     return render_template('login.html')
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', "POST"])
 def login():
     username = request.form['username']
     password = request.form['password']
@@ -78,15 +79,13 @@ def test():
     # Get the username and password from the GET parameters
     username = request.args.get('username')
     password = request.args.get('password')
-    if username and password:
+    if True:
         # Creating a JWT token with user claims
         token = jwt.generate_jwt({
             'user': username,
             'role': 'admin',  # Claims include 'role' that defines user privileges
-        }, app.config['SECRET_KEY'], 'RS256', datetime.timedelta(minutes=5))
+        }, app.config['SECRET_KEY'], 'HS256', datetime.timedelta(minutes=5))
         return jsonify({'token': token})
-    
-    return 'Could not verify', 401
 
 # Protected route, only accessible to users with 'admin' role
 @app.route('/protected', methods=['GET'])
