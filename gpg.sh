@@ -92,3 +92,11 @@ else
     exit 1
 fi
 
+
+
+#Grading Script for this can be 
+#gpg --verify vulnerable_code.tar.gz.asc vulnerable_code.tar.gz 
+# If the output looks like : 
+#gpg:                using RSA key 4E30E9F5CC3767C2B269AD6D197B23285B362FEF
+# gpg: Good signature from "Test User <sreepragnamachupalli@gmail.com>" [ultimate]
+#Then Script passes else nope 
