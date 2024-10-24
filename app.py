@@ -67,7 +67,8 @@ def login():
         user = c.fetchone()
         conn.close()
         if user:
-            return render_template('welcome.html', username=username)
+            session['logged_in'] = True
+            return redirect(url_for('index'))
         else:
             return "Invalid credentials", 401
     except sqlite3.Error as e:
