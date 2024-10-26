@@ -3,6 +3,7 @@ from flask import Flask, request, redirect, send_from_directory, render_template
 import sqlite3
 
 import datetime
+import jwt
 from jwcrypto import jwk
 
 app = Flask(__name__)
@@ -39,8 +40,16 @@ def login():
 
     # Hardcoded secret vulnerability
     if password == ADMIN_PASSWORD:
-        session['logged_in'] = True
-        return redirect(url_for('index'))
+        token = request.cookies.get('token')
+        if not token:
+            return render_template('login.html')
+        try:
+            decoded = jwt.decode(token, PUBLIC_KEY, algorithms=jwt.algorithms.get_default_algorithms())
+            if decoded.get("role") == "admin":
+                session['logged_in'] = True
+                return redirect(url_for('index'))
+        except Exception:
+            return render_template('login.html')
         # return render_template('welcome.html', username="Admin")
 
     # Vulnerable SQL query - User input directly passed into SQL query (SQL Injection)
@@ -55,7 +64,15 @@ def login():
         user = c.fetchone()
         conn.close()
         if user:
-            return render_template('welcome.html', username=username)
+            payload = {
+                "role": "student", 
+                "exp": datetime.datetime.now() + datetime.timedelta(days=1)
+            }
+            token = jwt.encode(payload, PRIVATE_KEY, algoithm="EdDSA")
+
+            response = make_response(render_template('welcome.html', username=username))
+            response.set_cookie('token', token)
+            return response
         else:
             return "Invalid credentials", 401
     except sqlite3.Error as e:
