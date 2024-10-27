@@ -14,7 +14,6 @@ import sqlite3
 import datetime
 import jwt
 from jwt.algorithms import get_default_algorithms
-from jwcrypto import jwk
 from functools import wraps
 
 app = Flask(__name__)
