@@ -116,17 +116,11 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
 
-    # Vulnerable SQL query - User input directly passed into SQL query (SQL Injection)
-    #' OR '1'='1
-    query = (
-        f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'"
-    )
-
     # Executing the query (dangerous!)
     conn = get_db_connection()
     c = conn.cursor()
     try:
-        c.execute(query)
+        c.execute(f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'")
         user = c.fetchone()
         conn.close()
         if user:

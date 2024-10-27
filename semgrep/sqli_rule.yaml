@@ -1,0 +1,46 @@
+rules:
+  - id: sql-injection
+    message: Directly using unsanitized input in SQL queries can lead to SQL
+      injection vulnerabilities, which can be exploited to manipulate your
+      database. To pass variables to a SQL statement, use question mark in the
+      statement and pass in the arguments as a list or tuple. The '?'
+      placeholders are used to bind the variables to the SQL query.
+    metadata:
+      cwe:
+        - "CWE-89: Improper Neutralization of Special Elements used in a SQL
+          Command ('SQL Injection')"
+      category: security
+      technology:
+        - python
+        - flask
+        - sqlite3
+      confidence: LOW
+      impact: MEDIUM
+    languages:
+      - python
+    severity: WARNING
+    mode: taint
+    pattern-sources:
+      - patterns:
+          - pattern-either:
+              - pattern: flask.request.$PROPERTY[...]
+              - pattern: flask.request.$PROPERTY.get(...)
+          - pattern-inside: |
+              @app.route(...)
+              def $FUNC(...):
+                ...
+          - metavariable-regex:
+              metavariable: $PROPERTY
+              regex: ^(form|cookies)$
+    pattern-sinks:
+      - patterns:
+          - pattern-either:
+              - pattern: $DB.execute($TAINTED)
+              - pattern: $DB.execute(f"...'{$TAINTED}'...")
+          - pattern-not: |
+              $DB.execute("...", $TAINTED)
+          - focus-metavariable: $TAINTED
+          - pattern-inside: |
+              @app.route(...)
+              def $FUNC(...):
+                ...
