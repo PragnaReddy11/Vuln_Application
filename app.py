@@ -18,10 +18,10 @@ from functools import wraps
 
 app = Flask(__name__)
 
-with open("./keys/private_key.pem", "rb") as f:
+with open("./keys/private_key", "rb") as f:
     PRIVATE_KEY = f.read()
 
-with open("./keys/public_key.pem", "rb") as f:
+with open("./keys/public_key", "rb") as f:
     PUBLIC_KEY = f.read()
 
 # Directory to store uploaded files
