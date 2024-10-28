@@ -1,3 +1,6 @@
 users.db
 __pycache__/
 __pycache__/app.cpython-312.pyc
+venv/
+.python-version
+submissions/

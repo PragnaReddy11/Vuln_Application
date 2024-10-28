@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMU AIA File Upload Server - Home</title>
+    <title>AIA Gradescope - Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to CMU AIA Class File Upload Server</h1>
+        <h1>Welcome to AIA Gradescope, {{ username }}!</h1>
         <p>Select an option below:</p>
         
         <form method="GET" action="/upload">
             <button type="submit">Upload File</button>
         </form>
 
-        <form method="GET" action="/search">
-            <button type="submit">Search Files</button>
-        </form>
-
+        {% if is_admin %}
+            <form method="GET" action="/submissions">
+                <button type="submit">View Submissions</button>
+            </form>
+        {% endif %}
         <br><a href="/logout">Logout</a>
     </div>
 </body>
