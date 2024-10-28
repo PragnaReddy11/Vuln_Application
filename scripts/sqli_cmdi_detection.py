@@ -1,9 +1,8 @@
 import requests
 
-# Define the Flask server details
 BASE_URL = 'http://127.0.0.1:5000'
 
-# Define payloads for SQL Injection and Command Injection
+
 sql_injection_payloads = [
     "' OR '1'='1",
     "' OR '1'='1' --",
