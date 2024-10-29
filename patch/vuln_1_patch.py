@@ -33,8 +33,6 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Hardcoded secret (bad practice)
-# Remove code from line no : 37  
 def get_db_connection():
     conn = sqlite3.connect("users.db")  # This creates a persistent SQLite database file
     conn.row_factory = sqlite3.Row
@@ -118,16 +116,16 @@ def login():
     conn = get_db_connection()
     c = conn.cursor()
     try:
-        c.execute(f"SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+        c.execute(f"SELECT * FROM users WHERE username = '{username}' AND password = '{password}'")
         user = c.fetchone()
         conn.close()
         if user:
             session["logged_in"] = True
             session["username"] = username
-            # comment line no : 127 - role = "student" & replace with below line of code
-            role = "admin" if user["is_admin"] == 1 else "student"
 
+            role = "admin" if user["is_admin"] else "student"
             token = create_token(username=username, role=role)
+
             response = make_response(redirect(url_for("index")))
             response.set_cookie("token", token)
             return response
@@ -185,4 +183,4 @@ def public_key():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5002)
+    app.run(debug=True, host="0.0.0.0", port=5001)
