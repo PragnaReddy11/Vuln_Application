@@ -93,9 +93,7 @@ def index():
     token = request.cookies.get("token")
     if token:
         try:
-            decoded_token = jwt.decode(
-                token, PUBLIC_KEY, algorithms=get_default_algorithms()
-            )
+            decoded_token = verify_token(token)
             if decoded_token and decoded_token["role"] == "admin":
                 return render_template(
                     "home.html", username=session["username"], is_admin=True
