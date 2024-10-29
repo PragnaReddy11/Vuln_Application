@@ -34,7 +34,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 # Hardcoded secret (bad practice)
-
+# Remove code from line no : 37  
 def get_db_connection():
     conn = sqlite3.connect("users.db")  # This creates a persistent SQLite database file
     conn.row_factory = sqlite3.Row
@@ -124,7 +124,7 @@ def login():
         if user:
             session["logged_in"] = True
             session["username"] = username
-            #role = "student"
+            # comment line no : 127 - role = "student" & replace with below line of code
             role = "admin" if user["is_admin"] == 1 else "student"
 
             token = create_token(username=username, role=role)
