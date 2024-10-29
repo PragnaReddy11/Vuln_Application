@@ -126,11 +126,10 @@ def login():
         if user:
             session["logged_in"] = True
             session["username"] = username
-            role = "student"
-            if user["password"] == ADMIN_PASSWORD:
-                role = "admin"
-
+            
+            role = "admin" if user["password"] == ADMIN_PASSWORD else "student"
             token = create_token(username=username, role=role)
+            
             response = make_response(redirect(url_for("index")))
             response.set_cookie("token", token)
             return response
