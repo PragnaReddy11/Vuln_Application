@@ -33,10 +33,6 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Hardcoded secret (bad practice)
-ADMIN_PASSWORD = "admin"
-
-
 def get_db_connection():
     conn = sqlite3.connect("users.db")  # This creates a persistent SQLite database file
     conn.row_factory = sqlite3.Row
@@ -127,7 +123,7 @@ def login():
             session["logged_in"] = True
             session["username"] = username
             
-            role = "admin" if user["password"] == ADMIN_PASSWORD else "student"
+            role = "admin" if user["is_admin"] else "student"
             token = create_token(username=username, role=role)
             
             response = make_response(redirect(url_for("index")))

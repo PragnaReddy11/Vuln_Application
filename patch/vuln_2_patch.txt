@@ -1,0 +1,2 @@
+# Replace the line executing the SQl query with this:
+c.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
