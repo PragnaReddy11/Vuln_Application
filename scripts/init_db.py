@@ -1,4 +1,5 @@
 import sqlite3
+import sys
 
 # Persistent SQLite connection (rather than in-memory)
 def get_db_connection():
