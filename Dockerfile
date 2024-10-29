@@ -1,19 +1,14 @@
-FROM aia-vuln-base:latest
+FROM aia-flawscope-base:1.0.0
 
 WORKDIR /app
 
-RUN mkdir ./keys
-# add this to the base image
-RUN python ./scripts/init_db.py
-RUN python ./scripts/key_gen.py && mv ./private_key ./public_key ./keys
-
 COPY app.py ./
+
+RUN mkdir ./keys
+RUN python ./scripts/key_gen.py && mv ./private_key ./public_key ./keys
 
 EXPOSE 5001
 
 ENV FLASK_APP="app.py"
 
 CMD ["gunicorn", "-b", "0.0.0.0:5001", "app:app"]
-
-
-
