@@ -1,0 +1,6 @@
+# Step 1: Delete the line containing hardcoded ADMIN_PASSWORD from app.py
+
+# Step 2: Modify the line comparing user's password retrieved from DB with ADMIN_PASSWORD to below
+role = "admin" if user["is_admin"] else "student"
+
+# Step 3: Modify the version of base image to 1.0.1 to use a DB with new admin credentials.
