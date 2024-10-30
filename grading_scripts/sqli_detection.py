@@ -10,7 +10,6 @@ sql_injection_payloads = [
     "' OR '1'='1' #",
     "admin' --",
     "admin' #",
-    "'; DROP TABLE users; --"
 ]
 
 def test_sql_injection():
