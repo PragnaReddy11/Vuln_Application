@@ -29,11 +29,17 @@ def test_sql_injection():
             # SQL injection might be present if login succeeds without valid credentials
             vulnerable = True
             print(f"[!] SQL Injection detected with payload: {payload}")
+        elif response.status_code == 401 and "Invalid credentials" in response.text:
+            # If the response code is 401, it indicates invalid credentials
+            print(f"[+] No SQL Injection detected with payload: {payload}")
+            vulnerable = False
+            print("you got +10 points")
         elif response.status_code >= 400:
             # If the response code is 400 or 500, it indicates an error unrelated to SQLi
             print(f"[Warning] Received error code {response.status_code} for payload: {payload}")
     
     if not vulnerable:
+        print("================================================")
         print("[-] No SQL Injection vulnerabilities detected.")
 
 if __name__ == "__main__":
