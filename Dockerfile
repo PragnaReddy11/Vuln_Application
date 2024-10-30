@@ -1,4 +1,4 @@
-FROM aia-gr8scope-base:1.0.0
+FROM gr8scope-base:1.0.0
 
 WORKDIR /app
 
