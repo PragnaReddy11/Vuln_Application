@@ -2,7 +2,7 @@ import os
 
 # Define the log file path and search terms
 log_file = "/opt/sonarqube/logs/ce.log"
-success_keywords = ["AIA_Lab"]
+success_keywords = ["gr8scope"]
 
 
 def check_sonarqube_analysis(log_file, success_keywords):
