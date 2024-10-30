@@ -1,4 +1,8 @@
 import requests
+import re
+
+# Path to the file to check (e.g., 'app.py' for the backend code)
+FILE_PATH = 'app.py'
 
 # Define the base URL for the Flask application
 BASE_URL = 'http://127.0.0.1:5000'
@@ -32,16 +36,55 @@ def test_sql_injection():
         elif response.status_code == 401 and "Invalid credentials" in response.text:
             # If the response code is 401, it indicates invalid credentials
             print(f"[+] No SQL Injection detected with payload: {payload}")
-            vulnerable = False
             print("you got +10 points")
         elif response.status_code >= 400:
             # If the response code is 400 or 500, it indicates an error unrelated to SQLi
             print(f"[Warning] Received error code {response.status_code} for payload: {payload}")
+            return False
     
     if not vulnerable:
         print("================================================")
         print("[-] No SQL Injection vulnerabilities detected.")
+    return False
+
+
+
+# Pattern to identify parameterized queries (safe pattern for SQLite queries)
+safe_query_pattern = re.compile(r"execute\(.+?,\s*\(.+?\)\)")
+
+# Patterns to identify unsafe SQL query constructions
+unsafe_patterns = [
+    re.compile(r"execute\(.+?['\"].+['\"].+\)"),  # Detects inline user inputs in execute statements
+    re.compile(r"SELECT.*?FROM.*?WHERE.*?\s*=\s*['\"].+['\"]")  # Hardcoded string in WHERE clause
+]
+
+def check_sql_injection_patch():
+    """
+    Checks if the SQL injection vulnerability has been patched by looking for parameterized
+    query patterns in the code and alerting on unsafe patterns.
+    """
+    with open(FILE_PATH, 'r') as f:
+        code = f.read()
+
+    # Check for secure parameterized queries
+    if safe_query_pattern.search(code):
+        print("[+] Secure parameterized queries detected.")
+
+    # Check for insecure SQL patterns
+    insecure_found = False
+    for pattern in unsafe_patterns:
+        if pattern.search(code):
+            insecure_found = True
+            print(f"[!] Insecure SQL pattern detected: {pattern.pattern}")
+
+    if not insecure_found:
+        print("[-] No insecure SQL patterns detected.")
+
+if __name__ == "__main__":
+    # Run the SQL Injection patch check
+    check_sql_injection_patch()
 
 if __name__ == "__main__":
     # Run the SQL Injection test
-    test_sql_injection()
+    sqli_test1 = test_sql_injection()
+    sqli_test2 = check_sql_injection_patch()
