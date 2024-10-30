@@ -1,4 +1,4 @@
-FROM aia-flawscope-base:1.0.1
+FROM aia-gr8scope-base:1.0.1
 
 WORKDIR /app
 
