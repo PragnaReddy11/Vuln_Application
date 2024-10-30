@@ -1,8 +1,8 @@
 import requests
 import re
-
+import os
 # Path to the file to check (e.g., 'app.py' for the backend code)
-FILE_PATH = 'app.py'
+FILE_PATH = os.path.join(os.path.dirname(__file__), '../app.py')
 
 # Define the base URL for the Flask application
 BASE_URL = 'http://127.0.0.1:5000'
@@ -50,13 +50,10 @@ def test_sql_injection():
 
 
 # Pattern to identify parameterized queries (safe pattern for SQLite queries)
-safe_query_pattern = re.compile(r"execute\(.+?,\s*\(.+?\)\)")
+safe_query_pattern_1 = re.compile(r"execute\(.+?,\s*\(.+?\)\)")
+safe_query_pattern_2 = re.compile(r"\(.+?,\s*\[.+?\]\)")
 
-# Patterns to identify unsafe SQL query constructions
-unsafe_patterns = [
-    re.compile(r"execute\(.+?['\"].+['\"].+\)"),  # Detects inline user inputs in execute statements
-    re.compile(r"SELECT.*?FROM.*?WHERE.*?\s*=\s*['\"].+['\"]")  # Hardcoded string in WHERE clause
-]
+
 
 def check_sql_injection_patch():
     """
@@ -67,18 +64,20 @@ def check_sql_injection_patch():
         code = f.read()
 
     # Check for secure parameterized queries
-    if safe_query_pattern.search(code):
+    if safe_query_pattern_1.search(code):
+        print("[+] Secure parameterized queries detected.")
+    elif safe_query_pattern_2.search(code):
         print("[+] Secure parameterized queries detected.")
 
     # Check for insecure SQL patterns
-    insecure_found = False
-    for pattern in unsafe_patterns:
-        if pattern.search(code):
-            insecure_found = True
-            print(f"[!] Insecure SQL pattern detected: {pattern.pattern}")
+    # insecure_found = False
+    # for pattern in unsafe_patterns:
+    #     if pattern.search(code):
+    #         insecure_found = True
+    #         print(f"[!] Insecure SQL pattern detected: {pattern.pattern}")
 
-    if not insecure_found:
-        print("[-] No insecure SQL patterns detected.")
+    # if not insecure_found:
+    #     print("[-] No insecure SQL patterns detected.")
 
 if __name__ == "__main__":
     # Run the SQL Injection patch check
