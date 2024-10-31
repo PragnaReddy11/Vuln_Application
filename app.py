@@ -17,6 +17,8 @@ from jwt.algorithms import get_default_algorithms
 from functools import wraps
 
 app = Flask(__name__)
+csrf = CSRFProtect()
+csrf.init_app(app)
 
 with open("./keys/private_key", "rb") as f:
     PRIVATE_KEY = f.read()
@@ -108,7 +110,7 @@ def index():
     return render_template("home.html", username=session["username"], is_admin=False)
 
 
-@app.route("/login", methods=["GET", "POST"])
+@methods.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         return render_template("login.html")
@@ -140,7 +142,7 @@ def login():
 
 
 # File upload functionality
-@app.route("/upload", methods=["POST", "GET"])
+@methods.route("/upload", methods=["POST", "GET"])
 @login_required
 def upload_submission():
     """Allow users to view a submission"""
