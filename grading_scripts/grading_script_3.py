@@ -28,4 +28,3 @@ if __name__ == "__main__":
         check_scan_errors(scan)
         check_paths_scanned(scan)
         check_results(scan)
-
