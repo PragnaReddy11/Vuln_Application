@@ -36,9 +36,9 @@ rules:
       - patterns:
           - pattern-either:
               - pattern: $DB.execute($TAINTED)
-              - pattern: $DB.execute(f"...'{$TAINTED}'...")
+              - pattern: $DB.execute(f'...{ $TAINTED}...')
           - pattern-not: |
-              $DB.execute("...", $TAINTED)
+              $DB.execute("...", (..., $TAINTED, ...))
           - focus-metavariable: $TAINTED
           - pattern-inside: |
               @app.route(...)
