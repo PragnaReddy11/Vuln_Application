@@ -1,5 +1,4 @@
 import json
-import sys
 
 RESULT_PATH = "/home/student/gr8scope/semgrep/results.json"
 
