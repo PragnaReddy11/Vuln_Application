@@ -17,8 +17,6 @@ from jwt.algorithms import get_default_algorithms
 from functools import wraps
 
 app = Flask(__name__)
-csrf = CSRFProtect()
-csrf.init_app(app)
 
 with open("./keys/private_key", "rb") as f:
     PRIVATE_KEY = f.read()
@@ -95,9 +93,7 @@ def index():
     token = request.cookies.get("token")
     if token:
         try:
-            decoded_token = jwt.decode(
-                token, PUBLIC_KEY, algorithms=get_default_algorithms()
-            )
+            decoded_token = verify_token(token)
             if decoded_token and decoded_token["role"] == "admin":
                 return render_template(
                     "home.html", username=session["username"], is_admin=True
@@ -110,7 +106,7 @@ def index():
     return render_template("home.html", username=session["username"], is_admin=False)
 
 
-@methods.route("/login", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
         return render_template("login.html")
@@ -128,10 +124,10 @@ def login():
         if user:
             session["logged_in"] = True
             session["username"] = username
-
+            
             role = "admin" if user["password"] == ADMIN_PASSWORD else "student"
             token = create_token(username=username, role=role)
-
+            
             response = make_response(redirect(url_for("index")))
             response.set_cookie("token", token)
             return response
@@ -142,7 +138,7 @@ def login():
 
 
 # File upload functionality
-@methods.route("/upload", methods=["POST", "GET"])
+@app.route("/upload", methods=["POST", "GET"])
 @login_required
 def upload_submission():
     """Allow users to view a submission"""
