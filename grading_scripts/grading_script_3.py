@@ -1,7 +1,7 @@
 import json
 import sys
 
-RESULT_JSON_PATH = "/home/student/gr8scope/semgrep/"
+RESULT_PATH = "/home/student/gr8scope/semgrep/results.json"
 
 def check_scan_errors(scan: dict):
     if len(scan.get("errors")) != 0:
@@ -24,7 +24,7 @@ def check_results(scan: dict):
     print("Failed to detect SQL injection.")
 
 if __name__ == "__main__":
-    with open(RESULT_JSON_PATH, "r") as f:
+    with open(RESULT_PATH, "r") as f:
         scan = json.load(f)
         check_scan_errors(scan)
         check_paths_scanned(scan)
