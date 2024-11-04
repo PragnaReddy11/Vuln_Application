@@ -84,3 +84,10 @@ if __name__ == "__main__":
     # Run the SQL Injection test
     sqli_test1 = test_sql_injection()
     sqli_test2 = check_sql_injection_patch()
+
+    if sqli_test1 and sqli_test2:
+        print("================================================")
+        print("Grading checking for SQL Injection vulnerabilities passed. score 10/10")
+    else:
+        print("================================================")
+        print("Grading checking for SQL Injection vulnerabilities failed. score 0/10")
