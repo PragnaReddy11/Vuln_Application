@@ -79,9 +79,6 @@ def check_sql_injection_patch():
     # if not insecure_found:
     #     print("[-] No insecure SQL patterns detected.")
 
-if __name__ == "__main__":
-    # Run the SQL Injection patch check
-    check_sql_injection_patch()
 
 if __name__ == "__main__":
     # Run the SQL Injection test
