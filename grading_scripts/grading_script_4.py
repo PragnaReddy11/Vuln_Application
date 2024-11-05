@@ -97,3 +97,4 @@ if __name__ == "__main__":
     else:
         print("================================================")
         print("Grading checking for SQL Injection vulnerabilities remediation failed. score 0/10")
+        
