@@ -6,4 +6,4 @@ return jwt.decode(token, PUBLIC_KEY, algorithms=["EdDSA"])
 # Step 3: Upgrade the PyJWT version to 2.4.0 in requirements.txt
 PyJWT==2.4.0
 
-# Step 4: Modify the version of base image to 1.0.2 to use a DB with new admin credentials.
+# Step 4: Modify the version of base image to 1.0.2 to use patched PyJWT.
