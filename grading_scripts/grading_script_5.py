@@ -49,9 +49,9 @@ def get_session_token():
 def exploit(jwt_token: str, session_token:str):
     url = f'{BASE_URL}/submissions'
     cookies = {'token': jwt_token, 'session': session_token}
-    response = requests.get(url, cookies=cookies)
+    response = requests.get(url, cookies=cookies, allow_redirects=False)
 
-    if response.status_code == 200:
+    if response.status_code == 302:
         print("Exploit still works. Please check your patch.")
         return 
     
