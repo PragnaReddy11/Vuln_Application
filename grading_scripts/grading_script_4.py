@@ -29,23 +29,25 @@ def test_sql_injection():
         response = requests.post(f"{BASE_URL}/login", data=data)
 
         # Check for signs of SQL Injection vulnerability
-        if response.status_code == 200 and "Invalid credentials" not in response.text:
+        if response.status_code == 200 and ("Invalid credentials" not in response.text):
             # SQL injection might be present if login succeeds without valid credentials
             vulnerable = True
             print(f"[!] SQL Injection detected with payload: {payload}")
         elif response.status_code == 401 and "Invalid credentials" in response.text:
             # If the response code is 401, it indicates invalid credentials
             print(f"[+] No SQL Injection detected with payload: {payload}")
-            print("you got +10 points")
         elif response.status_code >= 400:
             # If the response code is 400 or 500, it indicates an error unrelated to SQLi
             print(f"[Warning] Received error code {response.status_code} for payload: {payload}")
             return False
     
-    if not vulnerable:
+    if vulnerable:
+        return False
+        
+    else:
         print("================================================")
-        print("[-] No SQL Injection vulnerabilities detected.")
-    return False
+        print("[+] No SQL Injection vulnerabilities detected.")
+        return True
 
 
 
@@ -66,8 +68,12 @@ def check_sql_injection_patch():
     # Check for secure parameterized queries
     if safe_query_pattern_1.search(code):
         print("[+] Secure parameterized queries detected.")
+        return True
     elif safe_query_pattern_2.search(code):
         print("[+] Secure parameterized queries detected.")
+        return True
+    else:
+        return False
 
     # Check for insecure SQL patterns
     # insecure_found = False
@@ -87,7 +93,7 @@ if __name__ == "__main__":
 
     if sqli_test1 and sqli_test2:
         print("================================================")
-        print("Grading checking for SQL Injection vulnerabilities passed. score 10/10")
+        print("Grading checking for SQL Injection vulnerabilities remediation passed. score 10/10")
     else:
         print("================================================")
-        print("Grading checking for SQL Injection vulnerabilities failed. score 0/10")
+        print("Grading checking for SQL Injection vulnerabilities remediation failed. score 0/10")
