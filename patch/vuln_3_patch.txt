@@ -1,9 +1,0 @@
-# Step 1: Modify the line in verify_token function using get_default_algorithms() to the following:
-return jwt.decode(token, PUBLIC_KEY, algorithms=["EdDSA"])
-
-# Step 2: Remove the import that imports get_default_algorithms()
-
-# Step 3: Upgrade the PyJWT version to 2.4.0 in requirements.txt
-PyJWT==2.4.0
-
-# Step 4: Modify the version of base image to 1.0.2 to use a DB with new admin credentials.
