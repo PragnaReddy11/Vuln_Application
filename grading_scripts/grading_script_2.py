@@ -1,14 +1,15 @@
 import re
 
 # File paths
-app_file_path = "app.py"
-docker_file_path = "Dockerfile"  # Updated path for the Dockerfile
+app_file_path = "../app.py"
+docker_file_path = "../Dockerfile"  # Updated path for the Dockerfile
 points = 0
 
 # Regular expressions
 hardcoded_password_pattern = re.compile(r'ADMIN_PASSWORD\s*=\s*["\'].*["\']')
 role_assignment_pattern = re.compile(r'role\s*=\s*["\']admin["\']\s*if\s*user\["is_admin"\]\s*else\s*["\']student["\']')
-base_image_version_pattern = re.compile(r'FROM\s+[\w/]+:\s*1\.0\.1')
+base_image_version_pattern = re.compile(r'FROM\s+[\w/-]+:\s*1\.0\.1', re.IGNORECASE)
+
 
 # Scan the file for hardcoded passwords
 def detect_hardcoded_password(file_path):
