@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <container_name>"
+    exit 1
+fi
+
+CONTAINER_NAME=$1
+
+if docker ps -a --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}$"; then
+    echo "Container '$CONTAINER_NAME' found."
+
+    if [ "$(docker inspect -f '{{.State.Running}}' "$CONTAINER_NAME")" == "true" ]; then
+        echo "Stopping container '$CONTAINER_NAME'..."
+        docker stop "$CONTAINER_NAME"
+    fi
+
+    echo "Removing container '$CONTAINER_NAME'..."
+    docker rm "$CONTAINER_NAME"
+    echo "Container '$CONTAINER_NAME' removed successfully."
+else
+    echo "Container '$CONTAINER_NAME' does not exist."
+fi
