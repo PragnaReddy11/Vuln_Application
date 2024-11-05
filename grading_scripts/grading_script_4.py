@@ -5,7 +5,7 @@ import os
 FILE_PATH = os.path.join(os.path.dirname(__file__), '../app.py')
 
 # Define the base URL for the Flask application
-BASE_URL = 'http://127.0.0.1:5000'
+BASE_URL = 'http://localhost:5001'
 
 # SQL Injection payloads
 sql_injection_payloads = [
