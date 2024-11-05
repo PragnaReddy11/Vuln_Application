@@ -1,4 +1,4 @@
-FROM gr8scope-base:1.0.0
+FROM docker-registry.local:5000/gr8scope-base:1.0.0
 
 WORKDIR /app
 
