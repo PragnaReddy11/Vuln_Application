@@ -8,7 +8,7 @@ points = 0
 # Regular expressions
 hardcoded_password_pattern = re.compile(r'ADMIN_PASSWORD\s*=\s*["\'].*["\']')
 role_assignment_pattern = re.compile(r'role\s*=\s*["\']admin["\']\s*if\s*user\["is_admin"\]\s*else\s*["\']student["\']')
-base_image_version_pattern = re.compile(r'FROM\s+[\w/-]+:\s*1\.0\.1', re.IGNORECASE)
+base_image_version_pattern = re.compile(r'^FROM docker-registry\.local:5000/gr8scope-base:1\.0\.1', re.IGNORECASE) 
 
 
 # Scan the file for hardcoded passwords
