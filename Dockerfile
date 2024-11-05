@@ -1,18 +1,6 @@
-ARG DB_VERSION=1
-
-FROM python:3.8.20-slim-bullseye
+FROM docker-registry.local:5000/gr8scope-base:1.0.2
 
 WORKDIR /app
-
-COPY requirements.txt ./
-RUN python -m pip install -r ./requirements.txt
-
-COPY scripts/ ./scripts
-COPY static/ ./static
-COPY templates/ ./templates
-
-ARG DB_VERSION
-RUN python ./scripts/init_db.py ${DB_VERSION}
 
 COPY app.py ./
 
