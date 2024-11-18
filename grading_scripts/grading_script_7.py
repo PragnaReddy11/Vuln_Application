@@ -30,6 +30,7 @@ def get_jwt_token(public_key: str):
         "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=15)
     }
     token = jwt.encode(payload, public_key, algorithm='HS256')
+    return token
 
 
 def get_session_token():
@@ -52,10 +53,11 @@ def exploit(jwt_token: str, session_token:str):
     response = requests.get(url, cookies=cookies, allow_redirects=False)
 
     if response.status_code == 302:
-        print("❌ Check #1 - Exploit still works: 0 points.")
+        print("✅ Check #1 - Exploit no longer works: +10 points.")
         return 
     
-    print("✅ Check #1 - Exploit no longer works: +10 points.")
+    print("❌ Check #1 - Exploit still works: 0 points.")
+    return
 
 
 def check_code():
@@ -91,8 +93,8 @@ def check_requirements():
 
 
 def check_docker_image():
-    old_base_regex = re.compile(r"FROM gr8scope:1\.0\.0")
-    new_base_regex = re.compile(r"FROM gr8scope:1\.0\.2")
+    old_base_regex = re.compile(r"FROM .*:1\.0\.1")
+    new_base_regex = re.compile(r"FROM .*:1\.0\.2")
     with open(DOCKER_PATH, 'r') as f:
         content = f.read()
         if old_base_regex.search(content):
