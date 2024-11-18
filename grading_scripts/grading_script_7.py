@@ -16,7 +16,7 @@ def get_public_key():
     url = f'{BASE_URL}/public_key'
     response = requests.get(url)
     if response.status_code != 200:
-        print("Please check server status.")
+        print("❌ Check #1 - Please check server status: 0 points.")
         return
     
     data = response.json()
@@ -41,7 +41,7 @@ def get_session_token():
     login_data = json.loads(data)
     response = session.post(url, data=login_data)
     if response.status_code != 200:
-        print("Please check server status.")
+        print("❌ Check #1 - Please check server status: 0 points.")
         return
     return session.cookies.get("session")
 
@@ -52,10 +52,10 @@ def exploit(jwt_token: str, session_token:str):
     response = requests.get(url, cookies=cookies, allow_redirects=False)
 
     if response.status_code == 302:
-        print("Exploit still works. Please check your patch.")
+        print("❌ Check #1 - Exploit still works: 0 points.")
         return 
     
-    print("Exploit no longer works (+10)")
+    print("✅ Check #1 - Exploit no longer works: +10 points.")
 
 
 def check_code():
@@ -64,13 +64,13 @@ def check_code():
     with open(APP_PATH, 'r') as f:
         for line in f:
             if vuln_regex.search(line):
-                print("JWT vulnerability detected in code.")
-                return
+                print("❌ Check #2 - JWT vulnerability detected in code: 0 points.")
+                return 
     
     with open(APP_PATH, 'r') as f:
         for line in f:
             if patch_regex.search(line):
-                print("Code successfully patched.")
+                print("✅ Check #2 - Code successfully patched: +10 points.")
     return
 
 
@@ -80,38 +80,46 @@ def check_requirements():
     with open(REQ_PATH, 'r') as f:
         content = f.read()
         if old_jwt_regex.search(content):
-            print('App dependencies are outdated and vulnerable.')
+            print("❌ Check #3 - Dependencies are outdated and vulnerable - 0 points")
             return
         
     with open(REQ_PATH, 'r') as f:
         content = f.read()
         if new_jwt_regex.search(content):
-            print('Requirements successfully updated.')
+            print("✅ Check #3 - Requirements successfully updated - +10 points")
     return
 
 
 def check_docker_image():
     old_base_regex = re.compile(r"FROM gr8scope:1\.0\.0")
-    new_base_regex = re.compile(r"ROM gr8scope:1\.0\.2")
+    new_base_regex = re.compile(r"FROM gr8scope:1\.0\.2")
     with open(DOCKER_PATH, 'r') as f:
         content = f.read()
         if old_base_regex.search(content):
-            print('Base image is outdated and vulnerable.')
+            print("❌ Check #4 - Base image is outdated and vulnerable - 0 points")
             return
     
     with open(DOCKER_PATH, 'r') as f:
         content = f.read()
         if new_base_regex.search(content):
-            print('Base image successfully updated.')
+            print("✅ Check #4 - Base image successfully updated - +10 points")
     return
 
 
-if __name__ == "__main__":
+def main():
     public_key = get_public_key()
+    if public_key is None:
+        return
+    
     jwt_token = get_jwt_token(public_key)
     session_token = get_session_token()
+    if jwt_token is None or session_token is None:
+        return
 
     exploit(jwt_token, session_token)
     check_code()
     check_requirements()
     check_docker_image()
+
+if __name__ == "__main__":
+    main()
