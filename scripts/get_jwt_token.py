@@ -27,5 +27,3 @@ if __name__ =="__main__":
 
     if payload["role"] == decoded_token["role"]:
         print(token)
-
-
