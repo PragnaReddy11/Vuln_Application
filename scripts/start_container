@@ -30,3 +30,4 @@ if docker ps --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}$"; then
     fi
 else
     echo "❌ Failed to create the container"
+fi
