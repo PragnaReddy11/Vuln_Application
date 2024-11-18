@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     if sqli_test1 and sqli_test2:
         print("================================================")
-        print("Grading Check 4 - SQL Injection vulnerabilities remediation passed: +10 points")
+        print("✅ Check 4 - SQL Injection vulnerabilities remediation passed: +10 points")
     else:
         print("================================================")
-        print("Grading Check 4 - SQL Injection vulnerabilities remediation failed: 0 points")
+        print("❌ Check 4 - SQL Injection vulnerabilities remediation failed: 0 points")
