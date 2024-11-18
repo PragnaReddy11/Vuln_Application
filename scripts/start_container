@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 <tag>"
+  exit 1
+fi
+
+TAG=$1
+PROJECT_PATH=/home/student/gr8scope
+CONTAINER_NAME=gr8scope-app-container
+
+echo "Building docker image with tag: $TAG..."
+docker build -t "$TAG" "$PROJECT_PATH"
+
+echo "Running Docker container..."
+docker run --rm -d -p 5001:5001 --name "$CONTAINER_NAME" "$TAG"
+
+echo "Waiting for the container to start..."
+sleep 5
+
+if docker ps --format '{{.Names}}' | grep -Eq "^${CONTAINER_NAME}$"; then
+    if [ "$(docker inspect -f '{{.State.Running}}' "$CONTAINER_NAME")" == "true" ]; then
+        echo "✅ Application is running at http://localhost:5001"
+    else
+        echo "❌ Failed to start the container. Run script with sudo privileges."
+        docker stop "$CONTAINER_NAME" && docker remove "$CONTAINER_NAME"
+        exit 1
+    fi
+else
+    echo "❌ Failed to create the container"
