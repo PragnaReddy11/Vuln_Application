@@ -32,7 +32,6 @@ def check_base_image_version(file_path):
     with open(file_path, 'r') as file:
         content = file.read()
         if base_image_version_pattern.search(content):
-            print("Base image version is correct.")
             return True
     return False
 
@@ -49,7 +48,7 @@ def grade_script():
 
     # Step 2: Check role assignment logic in app.py
     if check_role_assignment(app_file_path):
-        print(" ✅ Check #2 - Admin verification logic is correct: +10 points.")
+        print("✅ Check #2 - Admin verification logic is correct: +10 points.")
         # points += 10
     else:
         print("❌ Check #2 - Admin verification logic is incorrect: 0 points.")
