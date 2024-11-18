@@ -80,13 +80,13 @@ def check_requirements():
     with open(REQ_PATH, 'r') as f:
         content = f.read()
         if old_jwt_regex.search(content):
-            print("❌ Check #3 - Dependencies are outdated and vulnerable - 0 points")
+            print("❌ Check #3 - Dependencies are outdated and vulnerable: 0 points.")
             return
         
     with open(REQ_PATH, 'r') as f:
         content = f.read()
         if new_jwt_regex.search(content):
-            print("✅ Check #3 - Requirements successfully updated - +10 points")
+            print("✅ Check #3 - Requirements successfully updated: +10 points.")
     return
 
 
@@ -96,13 +96,13 @@ def check_docker_image():
     with open(DOCKER_PATH, 'r') as f:
         content = f.read()
         if old_base_regex.search(content):
-            print("❌ Check #4 - Base image is outdated and vulnerable - 0 points")
+            print("❌ Check #4 - Base image is outdated and vulnerable: 0 points.")
             return
     
     with open(DOCKER_PATH, 'r') as f:
         content = f.read()
         if new_base_regex.search(content):
-            print("✅ Check #4 - Base image successfully updated - +10 points")
+            print("✅ Check #4 - Base image successfully updated: +10 points.")
     return
 
 
