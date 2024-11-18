@@ -5,17 +5,17 @@ set -e
 
 # Variables
 PUBLIC_KEY="/home/student/keys/cosign.pub"
-REGISTRY_USERNAME="student"
+REGISTRY_USERNAME=""
 REGISTRY_PASSWORD="tartans@1"
 IMAGE_NAME="gr8scope_$IMAGE_TAG"
 
 cosign verify \ 
     --key "$PUBLIC_KEY" \
+    docker-registry.local:5000/gr8scope:1.0.3-beta \
     --allow-http-registry=true \
     --insecure-ignore-tlog=true \
-    --registry-username="$REGISTRY_USERNAME" \
-    --registry-password="$REGISTRY_PASSWORD" \
-    docker-registry.local:5000/gr8scope:1.0.3-beta > cosign_output.txt 2>&1
+    --registry-username='student' \
+    --registry-password='tartans@1' > cosign_output.txt 2>&1
 
 if grep -q "The cosign claims were validated" cosign_output.txt && \
    grep -q "The signatures were verified against the specified public key" cosign_output.txt; then
@@ -28,8 +28,8 @@ fi
 cosign verify \
     --key "$PUBLIC_KEY" \
     --local-image ~/gr8scope_1.0.3-beta/ \
-    --registry-username="$REGISTRY_USERNAME" \
-    --registry-password="$REGISTRY_PASSWORD" \
+    --registry-username='student' \
+    --registry-password='tartans@1' \
     --insecure-ignore-tlog=true > cosign_output.txt 2>&1
 
 # Check if the verification was successful
