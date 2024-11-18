@@ -20,7 +20,7 @@ def test_sql_injection():
     """
     Test the /login endpoint for SQL Injection vulnerabilities using POST requests.
     """
-    print("\n[SQL Injection Test on /login]")
+    # print("\n[SQL Injection Test on /login]")
 
     vulnerable = False
     for payload in sql_injection_payloads:
@@ -32,29 +32,27 @@ def test_sql_injection():
         if response.status_code == 200 and ("Invalid credentials" not in response.text):
             # SQL injection might be present if login succeeds without valid credentials
             vulnerable = True
-            print(f"[!] SQL Injection detected with payload: {payload}")
+            # print(f"[!] SQL Injection detected with payload: {payload}")
         elif response.status_code == 401 and "Invalid credentials" in response.text:
             # If the response code is 401, it indicates invalid credentials
-            print(f"[+] No SQL Injection detected with payload: {payload}")
+            # print(f"[+] No SQL Injection detected with payload: {payload}")
+            return False
         elif response.status_code >= 400:
             # If the response code is 400 or 500, it indicates an error unrelated to SQLi
-            print(f"[Warning] Received error code {response.status_code} for payload: {payload}")
+            # print(f"[Warning] Received error code {response.status_code} for payload: {payload}")
             return False
     
     if vulnerable:
         return False
         
     else:
-        print("================================================")
-        print("[+] No SQL Injection vulnerabilities detected.")
+        # print("================================================")
+        # print("[+] No SQL Injection vulnerabilities detected.")
         return True
-
-
 
 # Pattern to identify parameterized queries (safe pattern for SQLite queries)
 safe_query_pattern_1 = re.compile(r"execute\(.+?,\s*\(.+?\)\)")
 safe_query_pattern_2 = re.compile(r"\(.+?,\s*\[.+?\]\)")
-
 
 
 def check_sql_injection_patch():
@@ -67,24 +65,13 @@ def check_sql_injection_patch():
 
     # Check for secure parameterized queries
     if safe_query_pattern_1.search(code):
-        print("[+] Secure parameterized queries detected.")
+        # print("[+] Secure parameterized queries detected.")
         return True
     elif safe_query_pattern_2.search(code):
-        print("[+] Secure parameterized queries detected.")
+        # print("[+] Secure parameterized queries detected.")
         return True
     else:
         return False
-
-    # Check for insecure SQL patterns
-    # insecure_found = False
-    # for pattern in unsafe_patterns:
-    #     if pattern.search(code):
-    #         insecure_found = True
-    #         print(f"[!] Insecure SQL pattern detected: {pattern.pattern}")
-
-    # if not insecure_found:
-    #     print("[-] No insecure SQL patterns detected.")
-
 
 if __name__ == "__main__":
     # Run the SQL Injection test
@@ -93,7 +80,7 @@ if __name__ == "__main__":
 
     if sqli_test1 and sqli_test2:
         print("================================================")
-        print("Grading checking for SQL Injection vulnerabilities remediation passed. score 10/10")
+        print("Grading Check 4 - SQL Injection vulnerabilities remediation passed: +10 points")
     else:
         print("================================================")
-        print("Grading checking for SQL Injection vulnerabilities remediation failed. score 0/10")
+        print("Grading Check 4 - SQL Injection vulnerabilities remediation failed: 0 points")
