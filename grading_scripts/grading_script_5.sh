@@ -5,11 +5,8 @@ set -e
 
 # Variables
 PUBLIC_KEY="/home/student/keys/cosign.pub"
-REGISTRY_USERNAME=""
-REGISTRY_PASSWORD="tartans@1"
-IMAGE_NAME="gr8scope_$IMAGE_TAG"
 
-cosign verify \ 
+cosign verify \
     --key "$PUBLIC_KEY" \
     docker-registry.local:5000/gr8scope:1.0.3-beta \
     --allow-http-registry=true \
