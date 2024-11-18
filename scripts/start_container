@@ -15,7 +15,7 @@ echo "Building docker image with tag: $TAG..."
 docker build -t "$TAG" "$PROJECT_PATH"
 
 echo "Running Docker container..."
-docker run --rm -d -p 5001:5001 --name "$CONTAINER_NAME" "$TAG"
+docker run -d -p 5001:5001 --name "$CONTAINER_NAME" "$TAG"
 
 echo "Waiting for the container to start..."
 sleep 5
