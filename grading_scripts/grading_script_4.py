@@ -14,6 +14,7 @@ sql_injection_payloads = [
     "admin' --",
 ]
 
+
 def test_sql_injection():
     """
     Test the /login endpoint for SQL Injection vulnerabilities using POST requests.
@@ -51,9 +52,13 @@ def test_sql_injection():
 
 if __name__ == "__main__":
     # Run the SQL Injection test
+    points = 0
     sqli_test = test_sql_injection()
 
     if sqli_test:
-        print("✅ Check #4 - SQL Injection vulnerabilities remediation passed: +10 points")
+        points += 10
+        print("✅ Check 1 - SQL Injection vulnerabilities remediation passed: +10 points")
     else:
-        print("❌ Check #4 - SQL Injection vulnerabilities remediation failed: 0 points")
+        print("❌ Check 1 - SQL Injection vulnerabilities remediation failed: 0 points")
+
+    print(f"Total points: {points}/10")
