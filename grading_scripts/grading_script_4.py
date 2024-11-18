@@ -58,11 +58,11 @@ def check_sql_injection_patch():
 if __name__ == "__main__":
     # Run the SQL Injection test
     if test_sql_injection():
-        print("✅ Check #1 - Exploit no longer works: +10 points")
+        print("✅ Check #1 - Exploit no longer works: +10 points.")
     else:
-        print("❌ Check #1 - Exploit still works: 0 points")
+        print("❌ Check #1 - Exploit still works: 0 points.")
 
     if check_sql_injection_patch():
-        print("✅ Check #2 - SQL Injection patched: +10 points")
+        print("✅ Check #2 - SQL Injection patched: +10 points.")
     else:
-        print("❌ Check #2 - SQL Injection not patched: +10 points")
+        print("❌ Check #2 - SQL Injection not patched: 0 points.")
