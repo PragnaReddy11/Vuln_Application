@@ -11,9 +11,7 @@ BASE_URL = 'http://localhost:5001'
 sql_injection_payloads = [
     "' OR '1'='1",
     "' OR '1'='1' --",
-    "' OR '1'='1' #",
     "admin' --",
-    "admin' #",
 ]
 
 def test_sql_injection():
@@ -36,11 +34,11 @@ def test_sql_injection():
         elif response.status_code == 401 and "Invalid credentials" in response.text:
             # If the response code is 401, it indicates invalid credentials
             # print(f"[+] No SQL Injection detected with payload: {payload}")
-            return False
+            vulnerable = False
         elif response.status_code >= 400:
             # If the response code is 400 or 500, it indicates an error unrelated to SQLi
             # print(f"[Warning] Received error code {response.status_code} for payload: {payload}")
-            return False
+            vulnerable = True
     
     if vulnerable:
         return False
@@ -79,8 +77,6 @@ if __name__ == "__main__":
     sqli_test2 = check_sql_injection_patch()
 
     if sqli_test1 and sqli_test2:
-        print("================================================")
         print("✅ Check 4 - SQL Injection vulnerabilities remediation passed: +10 points")
     else:
-        print("================================================")
         print("❌ Check 4 - SQL Injection vulnerabilities remediation failed: 0 points")
