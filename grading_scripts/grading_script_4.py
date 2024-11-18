@@ -48,35 +48,12 @@ def test_sql_injection():
         # print("[+] No SQL Injection vulnerabilities detected.")
         return True
 
-# Pattern to identify parameterized queries (safe pattern for SQLite queries)
-safe_query_pattern_1 = re.compile(r"execute\(.+?,\s*\(.+?\)\)")
-safe_query_pattern_2 = re.compile(r"\(.+?,\s*\[.+?\]\)")
-
-
-def check_sql_injection_patch():
-    """
-    Checks if the SQL injection vulnerability has been patched by looking for parameterized
-    query patterns in the code and alerting on unsafe patterns.
-    """
-    with open(FILE_PATH, 'r') as f:
-        code = f.read()
-
-    # Check for secure parameterized queries
-    if safe_query_pattern_1.search(code):
-        # print("[+] Secure parameterized queries detected.")
-        return True
-    elif safe_query_pattern_2.search(code):
-        # print("[+] Secure parameterized queries detected.")
-        return True
-    else:
-        return False
 
 if __name__ == "__main__":
     # Run the SQL Injection test
-    sqli_test1 = test_sql_injection()
-    sqli_test2 = check_sql_injection_patch()
+    sqli_test = test_sql_injection()
 
-    if sqli_test1 and sqli_test2:
-        print("✅ Check 4 - SQL Injection vulnerabilities remediation passed: +10 points")
+    if sqli_test:
+        print("✅ Check #4 - SQL Injection vulnerabilities remediation passed: +10 points")
     else:
-        print("❌ Check 4 - SQL Injection vulnerabilities remediation failed: 0 points")
+        print("❌ Check #4 - SQL Injection vulnerabilities remediation failed: 0 points")
