@@ -8,9 +8,7 @@ success_keywords = ["gr8scope"]
 def check_sonarqube_analysis(log_file, success_keywords):
     # Check if the log file exists
     if not os.path.isfile(log_file):
-        print(
-            "Grading Script 1 failed! Check if you have successfully run the analysis."
-        )
+        print("❌ Check #1 - Log file missing: 0 points")
         return
 
     # Open and read the log file line by line
@@ -22,16 +20,14 @@ def check_sonarqube_analysis(log_file, success_keywords):
             if any(keyword in line for keyword in success_keywords):
                 found_success = True
 
-            # If both are found, print confirmation and break out of loop
+            # If success keyword found, print confirmation and return
             if found_success:
-                print("Grading Script 1 passed! +10 points")
+                print("✅ Check #1 - SonarQube Analysis Complete: +10 points")
                 return
 
     # If analysis was not confirmed, print a message
     if not found_success:
-        print(
-            "Grading Script 1 failed! Check the name of the project."
-        )
+        print("❌ Check #1 - Invalid Project Name: 0 points")
 
 
 # Run the function
