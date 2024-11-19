@@ -6,7 +6,7 @@ def check_scan_errors(scan: dict):
     if len(scan.get("errors")) != 0:
         print("❌ Check #1 - Semgrep scan failed with errors: 0 points.")
         return
-    print("✅ Check #2 - Semgrep scan has no errors: +10 points.")
+    print("✅ Check #1 - Semgrep scan has no errors: +10 points.")
 
 def check_paths_scanned(scan: dict):
     paths_scanned = scan.get("paths").get("scanned")
